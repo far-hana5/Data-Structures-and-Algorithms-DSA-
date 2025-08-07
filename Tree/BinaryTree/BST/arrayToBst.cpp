@@ -1,0 +1,162 @@
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+ class Node
+    {
+        public:
+          int val;
+          Node* left;
+          Node* right;
+          
+        Node(int val){
+            this->val=val;
+            this->left=NULL;
+            this->right=NULL;
+        }
+    };
+    
+Node* inputTree()
+{
+    int val;
+    cin>>val;
+    Node* root;
+    if(val==-1)root=NULL;
+    else root=new Node(val);
+    
+    queue<Node*>q;
+    
+    if(root) q.push(root);
+    
+    
+    while(!q.empty())
+    {
+        Node* p=q.front();
+        q.pop();
+        
+        
+        int l,r;
+        cin>>l>>r;
+        Node* myLeft; Node* myRight;
+        
+        if(l==-1)myLeft=NULL;
+        else myLeft=new Node(l);
+        
+        if(r==-1)myRight=NULL;
+        else myRight=new Node(r);
+        
+        p->left=myLeft;
+        p->right=myRight;
+        
+        if(p->left)
+        {
+            q.push(p->left);
+        }
+        if(p->right)
+        {
+            q.push(p->right);
+        }
+        
+        
+    }
+    
+  return   root;
+    
+}
+
+bool search(Node* root,int val){
+    if(root==NULL)return false;
+    if(root->val==val)return true;
+    
+    if(val<root->val){
+      return  search(root->left,val);
+    }
+    else{
+       return search(root->right,val);
+    }
+}
+
+void levelOrder(Node* root)
+{
+    queue<Node*>q;
+    q.push(root);
+    
+    
+    while(!q.empty())
+    {
+        Node* p=q.front();
+        q.pop();
+        
+        cout<<p->val<<" ";
+        
+       
+        if(p->left)
+        {
+            q.push(p->left);
+        }
+        if(p->right)
+        {
+            q.push(p->right);
+        }
+     }
+    
+}
+
+void insert(Node* &root,int val){
+    if(root==NULL){
+        root=new Node(val);
+    }
+    
+    if(root->val >val){
+        //left
+        if(root->left ==NULL){
+            root->left=new Node(val);
+        }else{
+            insert(root->left,val);
+        }
+    }else{
+         if(root->right ==NULL){
+            root->right=new Node(val);
+        }else{
+            insert(root->right,val);
+        }
+    }
+}
+
+
+ Node* arrayToBst(int a[],int n,int l,int r){
+ if(l>r)return NULL;    
+    
+int mid=(l+r)/2;
+Node* root=new Node (a[mid]);
+ Node* leftroot=arrayToBst(a,n,l,mid-1);
+Node* rightroot=arrayToBst(a,n,mid+1,r);
+
+root->left=leftroot;
+root->right=rightroot;
+ return root;
+}
+
+
+int main()
+{
+   int n;
+   cin>>n;
+   int a[n];
+   for(int i=0;i<n;i++){
+       cin>>a[i];
+   }
+ Node* root=  arrayToBst(a,n,0,n-1);
+  //Node* root=inputTree();
+ // int val;cin>>val;
+ // insert(root,val);
+ levelOrder(root);
+    return 0;
+}
